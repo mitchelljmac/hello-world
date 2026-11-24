@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brick Picker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🧱 Brick Picker</h1>
+    <p class="tagline">Tell it what you're building, snap the pile on the floor, and pick up the circled pieces.</p>
+  </header>
+
+  <main>
+    <!-- STEP 0: API key -->
+    <section id="keyCard" class="card">
+      <h2><span class="step">0</span> Claude API key</h2>
+      <p class="hint">The app uses Claude's vision to read parts lists and spot pieces. Your key stays in this browser only (saved in local storage) and is sent straight to Anthropic.</p>
+      <div class="row">
+        <input id="apiKey" type="password" placeholder="sk-ant-..." autocomplete="off" />
+        <button id="saveKey">Save</button>
+      </div>
+      <p id="keyStatus" class="hint"></p>
+    </section>
+
+    <!-- STEP 1: The set -->
+    <section class="card">
+      <h2><span class="step">1</span> What are you building?</h2>
+      <p class="hint">Upload a photo of the parts inventory page at the back of the instruction booklet (or the box / a set listing). Add several photos if the list spans pages.</p>
+      <div class="row">
+        <input id="setName" type="text" placeholder="Set name (optional), e.g. 31058 Mighty Dinosaurs" />
+      </div>
+      <div class="row">
+        <label class="filebtn">📷 Parts list photo(s)
+          <input id="setPhotos" type="file" accept="image/*" multiple />
+        </label>
+        <button id="readSet" disabled>Read parts list</button>
+      </div>
+      <div id="setThumbs" class="thumbs"></div>
+      <p id="setStatus" class="status"></p>
+
+      <details id="manualAdd">
+        <summary>Add a piece by hand</summary>
+        <div class="row">
+          <input id="mName" type="text" placeholder="e.g. 2x4 brick" />
+          <input id="mColor" type="text" placeholder="Color" />
+          <input id="mQty" type="number" min="1" value="1" class="qty" />
+          <button id="mAdd">Add</button>
+        </div>
+      </details>
+    </section>
+
+    <!-- Checklist -->
+    <section class="card">
+      <div class="listhead">
+        <h2><span class="step">✓</span> Pieces needed</h2>
+        <button id="resetAll" class="ghost">Start over</button>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <p id="progressText" class="hint">No set loaded yet.</p>
+      <ul id="partList"></ul>
+    </section>
+
+    <!-- STEP 2: Floor photo -->
+    <section class="card">
+      <h2><span class="step">2</span> Find them on the floor</h2>
+      <p class="hint">Take a photo of the pile from straight above with good light. Spread pieces out a bit for best results. Circled pieces are ones you still need — tap a circle once you've picked it up.</p>
+      <div class="row">
+        <label class="filebtn">📷 Floor photo
+          <input id="floorPhoto" type="file" accept="image/*" capture="environment" />
+        </label>
+        <button id="scan" disabled>Find my pieces</button>
+      </div>
+      <p id="scanStatus" class="status"></p>
+      <div id="stage" class="stage hidden">
+        <canvas id="canvas"></canvas>
+      </div>
+      <ul id="foundList" class="found"></ul>
+    </section>
+  </main>
+
+  <div id="done" class="done hidden">
+    <div>
+      <div class="big">🎉</div>
+      <h2>You've got every piece!</h2>
+      <p>Time to build.</p>
+      <button id="closeDone">Nice</button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
